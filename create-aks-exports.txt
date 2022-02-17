@@ -1,0 +1,5 @@
+export ESHOP_RG=eshop-learn-rg
+export ESHOP_LOCATION=centralus
+export ESHOP_AKSNAME=eshop-learn-aks
+export ESHOP_AKSNODERG=MC_eshop-learn-rg_eshop-learn-aks_centralus
+export ESHOP_LBIP=20.84.221.130
