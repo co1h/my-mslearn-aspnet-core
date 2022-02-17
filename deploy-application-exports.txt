@@ -1,3 +1,3 @@
 export ESHOP_LBIP=20.84.221.130
 export ESHOP_HOST=20.84.221.130
-export ESHOP_REGISTRY=eshopdev
+export ESHOP_REGISTRY=eshoplearn20220217040236342.azurecr.io
