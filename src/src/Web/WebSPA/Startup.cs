@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-//using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement;
 using StackExchange.Redis;
 using System;
 using WebSPA.Infrastructure;
@@ -39,12 +39,17 @@ namespace eShopOnContainers.WebSPA
         public void ConfigureServices(IServiceCollection services)
         {
             // Add the AddFeatureManagement code
+            if (Configuration.GetValue<bool>("UseFeatureManagement"))
+            {
+                services.AddFeatureManagement();
+                services.AddAzureAppConfiguration();
+            }
 
             services
                 .AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy())
-                .AddUrlGroup(new Uri(Configuration["IdentityUrlHC"]), 
-                    name: "identityapi-check", 
+                .AddUrlGroup(new Uri(Configuration["IdentityUrlHC"]),
+                    name: "identityapi-check",
                     tags: new string[] { "identityapi" });
 
             services.Configure<AppSettings>(Configuration);
@@ -60,17 +65,17 @@ namespace eShopOnContainers.WebSPA
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddControllersWithViews(options =>
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()))
-                    .AddJsonOptions(options => 
+                    .AddJsonOptions(options =>
                         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true);
             services.AddSpaStaticFiles(configuration => configuration.RootPath = "wwwroot");
-            
+
             services.AddControllersWithViews();
             services.AddHttpClient<ICouponService, CouponService>();
         }
 
-        public void Configure(IApplicationBuilder app, 
-            IWebHostEnvironment env, 
-            ILoggerFactory loggerFactory, 
+        public void Configure(IApplicationBuilder app,
+            IWebHostEnvironment env,
+            ILoggerFactory loggerFactory,
             IAntiforgery antiforgery)
         {
             if (env.IsDevelopment())
@@ -79,6 +84,10 @@ namespace eShopOnContainers.WebSPA
             }
 
             // Add the UseAzureAppConfiguration code
+            if (Configuration.GetValue<bool>("UseFeatureManagement"))
+            {
+                app.UseAzureAppConfiguration();
+            }
 
             app.Use(next => context =>
             {
@@ -115,6 +124,10 @@ namespace eShopOnContainers.WebSPA
             app.UseEndpoints(endpoints =>
             {
                 // Add the MapFeatureManagement code
+                if (Configuration.GetValue<bool>("UseFeatureManagement"))
+                {
+                    endpoints.MapFeatureManagement();
+                }
 
                 endpoints.MapControllerRoute(
                    name: "CouponStatus",
@@ -138,7 +151,7 @@ namespace eShopOnContainers.WebSPA
                 spa.Options.SourcePath = "Client";
 
                 if (env.IsDevelopment())
-                { 
+                {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });

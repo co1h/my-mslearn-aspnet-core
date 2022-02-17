@@ -22,6 +22,6 @@ data:
   SignalrHubUrl: {{ .Values.protocol }}://{{ .Values.host }}/apigateway
   UseCustomizationData: "True"
   UseLoadTest: "False"
-  #UseFeatureManagement: "True"
-  #FeatureManagement__Coupons: "True"
-  #AppConfig__Endpoint: <connection-string>
+  UseFeatureManagement: "True"
+  FeatureManagement__Coupons: "False"
+  AppConfig__Endpoint: "Endpoint=https://eshoplearn20220217040236342.azconfig.io;Id=jdyo-l4-s0:OYPcNS4vqIs7SbG4YxCH;Secret=NcqNoNuIp8PBcPxphlqTnTx/rUFJwwCCdmJ3HijOZLc="
