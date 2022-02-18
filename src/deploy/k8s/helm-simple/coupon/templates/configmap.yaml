@@ -10,7 +10,7 @@ data:
   ASPNETCORE_URLS: http://0.0.0.0:80
   AzureServiceBusEnabled: "False"
   CheckUpdateTime: "30000"
-  ConnectionString: mongodb://nosqldata
+  ConnectionString: mongodb://eshop-learn-20220218055747309:rg4aTOMMrOQ8P727ET63OWuSisSfE3PiEcQzdGZ7WY0nLclKF6YN6kQJgPZ7ceiOROPVTG3EKeiFqW2sb8zRiw==@eshop-learn-20220218055747309.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@eshop-learn-20220218055747309@
   EventBusConnection: rabbitmq
   identityUrl: http://identity-api
   IdentityUrlExternal: {{ .Values.protocol }}://{{ .Values.host }}/identity

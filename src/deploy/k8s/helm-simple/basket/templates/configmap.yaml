@@ -8,7 +8,7 @@ metadata:
 data:
   ASPNETCORE_ENVIRONMENT: Development
   AzureServiceBusEnabled: "False"
-  ConnectionString: basketdata
+  ConnectionString: eshop-redis-20220218055747309.redis.cache.windows.net:6380,password=vOVSxFomxBw7gcKpUfH7K9O5Ot9fE1vCcAzCaJ4ofrs=,ssl=True,abortConnect=False
   EventBusConnection: rabbitmq
   identityUrl: http://identity-api
   IdentityUrlExternal: {{ .Values.protocol }}://{{ .Values.host }}/identity

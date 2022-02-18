@@ -105,7 +105,12 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             services.Configure<BasketSettings>(Configuration);
 
             // Add the ConnectionMultiplexer code...         
-            
+            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<BasketSettings>>().Value;
+                return ConnectionMultiplexer.Connect(settings.ConnectionString);
+            });
+
             if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
@@ -165,7 +170,8 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Basket Repository -- Replace the following line to enable Redis
-            services.AddSingleton<IBasketRepository, InMemoryBasketRepository>();
+            // services.AddSingleton<IBasketRepository, InMemoryBasketRepository>();
+            services.AddTransient<IBasketRepository, RedisBasketRepository>();
 
             services.AddTransient<IIdentityService, IdentityService>();
 
@@ -244,22 +250,22 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
 
         private void ConfigureAuthService(IServiceCollection services)
         {
-             // prevent from mapping "sub" claim to nameidentifier.
-             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 
-             var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
 
-             services.AddAuthentication(options =>
-             {
-                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-             }).AddJwtBearer(options =>
-             {
-                 options.Authority = identityUrl;
-                 options.RequireHttpsMetadata = false;
-                 options.Audience = "basket";
-             });
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "basket";
+            });
         }
 
         protected virtual void ConfigureAuth(IApplicationBuilder app)
@@ -333,6 +339,10 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
 
             // Add the healthcheck code...
+            hcBuilder.AddRedis(configuration["ConnectionString"],
+                name: "redis-check",
+                tags: new string[] { "redis" });
+
 
             if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
             {
