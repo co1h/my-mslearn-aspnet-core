@@ -1,0 +1,9 @@
+export ESHOP_RG=eshop-learn-rg
+export ESHOP_LOCATION=eastus2
+export ESHOP_AKSNAME=eshop-learn-aks
+export ESHOP_LBIP=20.96.43.93
+export ESHOP_ACRNAME=eshoplearn20220219050537640
+export ESHOP_REGISTRY=eshoplearn20220219050537640.azurecr.io
+export ESHOP_ACRUSER=eshoplearn20220219050537640
+export ESHOP_ACRPASSWORD=2dC6Fqo0csnQ6kafiwGwKj5lLJcl7BQ/
+export ESHOP_IDTAG=20220219050537640

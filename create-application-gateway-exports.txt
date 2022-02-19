@@ -1,0 +1,6 @@
+export ESHOP_RG=eshop-learn-rg
+export ESHOP_LOCATION=westus
+export ESHOP_APPVNET=app-vnet
+export ESHOP_APPGATEWAY=appgw
+export ESHOP_APPGATEWAYRG=eshop-learn-rg
+export ESHOP_APPGATEWAYPUBLICIP=20.122.69.154
